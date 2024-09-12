@@ -1,3 +1,9 @@
+<?php
+global $config;
+include 'libs/libs.php';
+include  'config.php';
+$_SESSION['madal_login'] = ' ';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +11,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="shortcut icon" href="img/logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= $config['base']['url'] ?>img/logo.png" type="image/x-icon">
     <!-- google font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,39 +22,82 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!-- style -->
-    <link rel="stylesheet" href="css/media.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="<?= $config['base']['url'] ?>css/media.css">
+    <link rel="stylesheet" href="<?= $config['base']['url'] ?>css/style.css">
 </head>
 
 <body>
+    <?php
+        echo $_SESSION['login'];
+    ?>
     <div class="login">
         <svg id="mysvg"></svg>
         <div class="hero_text">
-            <form action="" class="login_form"  method="post">
-                <a href="">login</a>
+            <p>Kursga yozilish uchun shaxsingizni tasdiqlash</p>
+            <form action="" class="login_form" method="post">
+                <a href="">Logo</a>
                 <ul>
                     <li>
                         <label for="">Ism</label>
-                        <input type="text" placeholder="Ism..">
+                        <input name="ism" type="text" placeholder="Ism..">
                     </li>
                     <li>
                         <label for="">Familya</label>
-                        <input type="text" placeholder="Familya">
+                        <input name="fam" type="text" placeholder="Familya">
                     </li>
                     <li>
                         <label for="">Telefon</label>
-                        <input type="text" placeholder="Telefon" value="+998">
+                        <input name="tel" type="text" placeholder="Telefon" value="+998">
                     </li>
                     <li>
-                        <button type="submit">
+                        <button name="addUser" type="submit">
                             Saqlash
                         </button>
                     </li>
                 </ul>
             </form>
+
+            <?php
+            if (isset($_POST['addUser'])) {
+                if (
+                    (isset($_POST['ism']) && !empty($_POST['ism'])) &&
+                    (isset($_POST['fam']) && !empty($_POST['fam'])) &&
+                    (isset($_POST['tel']) && !empty($_POST['tel']))
+                ) {
+            ?>
+
+                    <?php foreach (GetAll('admin', 'false', 'asc') as $key => $user) : ?>
+                        <?php
+                        if ($_POST['ism'] === $user['ism'] && $_POST['fam'] === $user['fam']  && $_POST['tel'] === $user['tel']) {
+                            reflesh(url_admin, '');
+                            $_SESSION['login'] = 'active';
+                        } else {
+                            $aloqaInputGet = test_input([
+                                $_POST['ism'],
+                                $_POST['fam'],
+                                $_POST['tel']
+                            ]);
+                            if (getInsert('user', ['ism', 'fam', 'tel'], $aloqaInputGet)) {
+                                reflesh(url, '');
+                                $_SESSION['madal_login'] = 'active';
+                            } else {
+                                echo 'xatolik';
+                            }
+                        }
+                        ?>
+
+                    <?php endforeach; ?>
+
+            <?php } else {
+                    echo 'xatolik';
+                }
+            } ?>
+
+
         </div>
     </div>
 </body>
+
 
 
 <script>
@@ -182,8 +231,7 @@
             var distance = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
             if (distance < (activeRadius - circleRadius)) {
                 circlesNearby.push(current);
-            }
-            else {
+            } else {
                 circlesFaraway.push(current);
             }
         }
@@ -195,11 +243,13 @@
     }
 
     function addBorders() {
-        for (var i = 0; (i + 1) < circlesNearby.length; i++) {
+        for (var i = 0;
+            (i + 1) < circlesNearby.length; i++) {
             circlesNearby[i].setAttributeNS(null, 'stroke', 'yellow');
             circlesNearby[i].setAttributeNS(null, 'stroke-width', '5');
         }
-        for (var i = 0; (i + 1) < circlesFaraway.length; i++) {
+        for (var i = 0;
+            (i + 1) < circlesFaraway.length; i++) {
             circlesFaraway[i].setAttributeNS(null, 'stroke', '');
         }
     }

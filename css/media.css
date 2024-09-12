@@ -79,6 +79,12 @@
         grid-template-columns: 1fr !important;
         padding-bottom: 50px !important;
     }
+    .madal_item{
+        padding: 10px;
+    }
+    .madal_item p{
+        font-size: 14px;
+    }
 }
 
 /* Custom, iPhone Retina */

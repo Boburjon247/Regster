@@ -3,6 +3,7 @@
   margin: 0;
   box-sizing: border-box;
   font-family: "SUSE", sans-serif;
+  position: relative;
 }
 
 p {
@@ -30,6 +31,15 @@ ul {
 .navbar {
   background-color: #111827;
   height: 74px;
+}
+
+.logo a {
+  width: 40px;
+  height: 40px;
+  display: block;
+}
+.logo a img {
+  width: 100%;
 }
 
 .sectionContainerFluid {
@@ -357,4 +367,42 @@ svg {
   height: 35px;
   background-color: #10203a;
   color: red;
+}
+
+.madal_item {
+  background-color: rgb(21, 130, 21);
+  position: fixed;
+  z-index: 1516516;
+  right: -100%;
+  bottom: 20px;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px lime;
+}
+.madal_item p {
+  font-size: 20px;
+  color: #fff;
+}
+
+.madal_item.active {
+  animation: madal_item 10s 1;
+}
+
+@keyframes madal_item {
+  0% {
+    right: -100%;
+    bottom: 20px;
+  }
+  10% {
+    right: 20px;
+    bottom: 20px;
+  }
+  90% {
+    right: 20px;
+    bottom: 20px;
+  }
+  100% {
+    right: -100%;
+    bottom: 20px;
+  }
 }/*# sourceMappingURL=style.css.map */
